@@ -1,0 +1,4 @@
+<div class="flex flex-row gap-1 align-middle">
+    <img src="{{ asset('/images/logo.png') }}" alt="Logo" class="h-10">
+    <h3 class="heading-3">{{ env('APP_NAME')  }}</h3>
+</div>

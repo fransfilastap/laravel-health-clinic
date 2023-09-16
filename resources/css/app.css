@@ -1,0 +1,3 @@
+.fi-topbar {
+    @apply backdrop-blur-2xl bg-opacity-30
+}
