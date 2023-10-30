@@ -18,7 +18,5 @@ class RoleSeeder extends Seeder
             'name' => 'Super Admin',
             'guard_name' => 'web'
         ]);
-
-        Rol
     }
 }
