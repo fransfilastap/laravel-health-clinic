@@ -55,7 +55,7 @@ class MedicalRecordResource extends Resource
                             ->columnSpan(['lg' => 1])
                             ->hidden(fn(?MedicalRecord $record) => $record === null)
                     ])->columns(2),
-                static::getExaminationDetailScheme(),
+                ...static::getExaminationDetailScheme(),
                 static::getMedicalTreatmentScheme(),
             ]);
     }
@@ -162,7 +162,7 @@ class MedicalRecordResource extends Resource
         ];
     }
 
-    public static function getDoctorFormScheme()
+    public static function getDoctorFormScheme(): Forms\Components\Section
     {
         return Forms\Components\Section::make('Doctor')->schema([
             Forms\Components\Select::make('doctor_id')
@@ -199,19 +199,51 @@ class MedicalRecordResource extends Resource
         ]);
     }
 
-    public static function getExaminationDetailScheme(): Forms\Components\Component
+    public static function getExaminationDetailScheme(): array
     {
-        return
-            Forms\Components\Section::make(__('labels.medical_record.examination_details'))
+        return [
+            Forms\Components\Section::make(__('labels.medical_record.standard_examination'))
                 ->schema([
-                    Forms\Components\Textarea::make('complaint')
-                        ->label(__('labels.medical_record.complaint'))
-                        ->required(),
-                    Forms\Components\Textarea::make('anamnesis')
-                        ->required(),
-                    Forms\Components\Textarea::make('physical_examination')
-                        ->rows(3)
-                        ->label(__('labels.medical_record.physical_examination')),
+                    Forms\Components\Grid::make(['default' => 1, 'md' => 2])
+                        ->schema([
+                            Forms\Components\Fieldset::make('Keluhan')
+                                ->schema([
+                                    Forms\Components\Textarea::make('complaint')
+                                        ->label(__('labels.medical_record.complaint'))
+                                        ->required(),
+                                    Forms\Components\Textarea::make('anamnesis')
+                                        ->required(),
+                                    Forms\Components\Textarea::make('physical_examination')
+                                        ->rows(3)
+                                        ->label(__('labels.medical_record.physical_examination')),
+                                ]),
+                            Forms\Components\Fieldset::make('Pemeriksaan Standar')
+                                ->schema([
+                                    Forms\Components\TextInput::make('blood_pressure')
+                                        ->label('Tekanan Darah')
+                                        ->suffix('mmhg')
+                                        ->required(),
+                                    Forms\Components\TextInput::make('body_temperature')
+                                        ->label('Suhu Tubuh')
+                                        ->suffix('C')
+                                        ->required(),
+                                    Forms\Components\TextInput::make('heart_rate')
+                                        ->label('Heart Rate')
+                                        ->suffix('kali/menit')
+                                        ->required(),
+                                    Forms\Components\TextInput::make('respiration')
+                                        ->label('Respirasi')
+                                        ->suffix('kali/menit')
+                                        ->required(),
+                                    Forms\Components\TextInput::make('saturation')
+                                        ->label('Saturation')
+                                        ->suffix('%')
+                                        ->required()
+                                ])
+                        ])
+                ]),
+            Forms\Components\Section::make(__('labels.medical_record.additional_examination'))
+                ->schema([
                     Forms\Components\Repeater::make('lab_examinations')
                         ->label(__('labels.medical_record.lab_examination'))
                         ->required(false)
@@ -237,8 +269,9 @@ class MedicalRecordResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('name')->required(),
                             Forms\Components\TextInput::make('result'),
-                        ]),
-                ]);
+                        ])
+                ]),
+        ];
     }
 
     public static function getPatientScheme(): Forms\Components\Component

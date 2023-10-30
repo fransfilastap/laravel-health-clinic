@@ -18,7 +18,7 @@ class StatsOverviewWidget extends BaseWidget
         return [
             Stat::make(__('labels.model.patient') . ' ', Patient::query()->count())
                 ->description('Number of Patients registered'),
-            Stat::make(__('labels.model.medical_record'), MedicalRecord::query()->count())
+            Stat::make(__('labels.model.visit'), MedicalRecord::query()->count())
                 ->description('Number of examinations conducted'),
             Stat::make(__('labels.model.medicine'), Medicine::query()->count())
                 ->description('Number of medicine type registered.')

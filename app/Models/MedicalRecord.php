@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\BloodPressure;
 use App\Filament\Resources\MedicalRecordResource\Enums\ServiceType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,8 @@ class MedicalRecord extends Model
     use HasFactory, SoftDeletes;
 
     protected $casts = [
-      'service_type' => ServiceType::class
+        'service_type' => ServiceType::class,
+        /*'blood_pressure' => BloodPressure::class*/
     ];
 
     public function patient(): BelongsTo
@@ -49,21 +51,30 @@ class MedicalRecord extends Model
         return $this->hasMany(AdvisedLabExamination::class);
     }
 
-    public function dentistryTreatment(): HasOne {
+    public function dentistryTreatment(): HasOne
+    {
         return $this->hasOne(DentistryTreatment::class);
     }
 
     public function hasPrescriptions(): bool
     {
-        return $this->prescriptions !== null;
+        return !($this->prescriptions === null);
     }
 
     public function delete(): ?bool
     {
-        $this->prescriptions->each->delete();
-        $this->labExaminations->each->delete();
-        $this->advisedPrescriptions->each->delete();
-        $this->advisedLabExaminations->each->delete();
+        if (!empty($this->prescriptions)) {
+            $this->prescriptions->each->delete();
+        }
+        if (!empty($this->labExaminations)) {
+            $this->labExaminations->each->delete();
+        }
+        if (!empty($this->advisedPrescriptions)) {
+            $this->advisedPrescriptions->each->delete();
+        }
+        if (!empty($this->advisedLabExaminations)) {
+            $this->advisedLabExaminations->each->delete();
+        }
 
         return parent::delete();
     }
