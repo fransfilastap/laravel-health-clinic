@@ -37,4 +37,8 @@ class Medicine extends Model
     public function isStockSufficient(int $stockNeeded):bool{
         return ($this->getAttribute('stock')->stock >= $stockNeeded);
     }
+/*
+    public function name() : Attribute {
+        return Attribute::make(get: fn(int $value) => $value.' '.$this->getAttribute('dose').$this->getAttribute('unit') );
+    }*/
 }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('lab_registries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('unit');
             $table->string('description');
             $table->softDeletes();
             $table->timestamps();

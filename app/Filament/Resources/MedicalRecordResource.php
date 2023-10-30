@@ -221,23 +221,28 @@ class MedicalRecordResource extends Resource
                                 ->schema([
                                     Forms\Components\TextInput::make('blood_pressure')
                                         ->label('Tekanan Darah')
+                                        ->numeric()
                                         ->suffix('mmhg')
                                         ->required(),
                                     Forms\Components\TextInput::make('body_temperature')
                                         ->label('Suhu Tubuh')
+                                        ->numeric()
                                         ->suffix('C')
                                         ->required(),
                                     Forms\Components\TextInput::make('heart_rate')
                                         ->label('Heart Rate')
                                         ->suffix('kali/menit')
+                                        ->numeric()
                                         ->required(),
                                     Forms\Components\TextInput::make('respiration')
                                         ->label('Respirasi')
                                         ->suffix('kali/menit')
+                                        ->numeric()
                                         ->required(),
                                     Forms\Components\TextInput::make('saturation')
                                         ->label('Saturation')
                                         ->suffix('%')
+                                        ->numeric()
                                         ->required()
                                 ])
                         ])
@@ -335,7 +340,8 @@ class MedicalRecordResource extends Resource
                                 ->relationship('prescriptions')
                                 ->schema([
                                     Forms\Components\Select::make('medicine_id')
-                                        ->relationship(name: 'medicine', titleAttribute: 'name')
+                                        ->searchable()
+                                        ->relationship(name: 'medicine', titleAttribute: 'name_with_dose')
                                         ->required(),
                                     Forms\Components\TextInput::make('number')
                                         ->label('Quantity')
