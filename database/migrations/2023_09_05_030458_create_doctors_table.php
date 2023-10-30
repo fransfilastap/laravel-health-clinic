@@ -19,7 +19,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('user_id')->on('id')->references('users');
+            $table->foreign('user_id')->on('users')->references('id');
         });
     }
 
