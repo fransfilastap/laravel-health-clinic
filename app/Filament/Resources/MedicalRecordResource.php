@@ -221,28 +221,23 @@ class MedicalRecordResource extends Resource
                                 ->schema([
                                     Forms\Components\TextInput::make('blood_pressure')
                                         ->label('Tekanan Darah')
-                                        ->numeric()
                                         ->suffix('mmhg')
                                         ->required(),
                                     Forms\Components\TextInput::make('body_temperature')
                                         ->label('Suhu Tubuh')
-                                        ->numeric()
                                         ->suffix('C')
                                         ->required(),
                                     Forms\Components\TextInput::make('heart_rate')
                                         ->label('Heart Rate')
                                         ->suffix('kali/menit')
-                                        ->numeric()
                                         ->required(),
                                     Forms\Components\TextInput::make('respiration')
                                         ->label('Respirasi')
                                         ->suffix('kali/menit')
-                                        ->numeric()
                                         ->required(),
                                     Forms\Components\TextInput::make('saturation')
                                         ->label('Saturation')
                                         ->suffix('%')
-                                        ->numeric()
                                         ->required()
                                 ])
                         ])
@@ -264,7 +259,6 @@ class MedicalRecordResource extends Resource
 
                             Forms\Components\TextInput::make('result')
                                 ->required()
-                                ->numeric()
                         ]),
                     Forms\Components\Repeater::make('advisedExaminations')
                         ->label(__('labels.medical_record.advised_lab_examination'))
@@ -273,7 +267,6 @@ class MedicalRecordResource extends Resource
                         ->relationship('advisedLabExaminations')
                         ->schema([
                             Forms\Components\TextInput::make('name')->required(),
-                            Forms\Components\TextInput::make('result'),
                         ])
                 ]),
         ];

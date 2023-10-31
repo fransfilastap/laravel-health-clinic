@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('medical_records', function (Blueprint $table) {
-            $table->integer('blood_pressure');
-            $table->integer('body_temperature');
-            $table->integer('heart_rate');
-            $table->integer('respiration');
-            $table->integer('saturation');
+            $table->string('blood_pressure');
+            $table->string('body_temperature');
+            $table->string('heart_rate');
+            $table->string('respiration');
+            $table->string('saturation');
         });
     }
 
