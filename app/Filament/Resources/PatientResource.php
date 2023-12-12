@@ -19,6 +19,7 @@ class PatientResource extends Resource
     protected static ?string $model = Patient::class;
     protected static ?string $navigationGroup = 'Services';
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
     protected static ?string $recordTitleAttribute = "name";
 
 
@@ -49,6 +50,9 @@ class PatientResource extends Resource
                     ->options(Gender::class)
             ])
             ->actions([
+                Tables\Actions\Action::make('new medical record')
+                    ->url(fn (Patient $record) : string => route('filament.admin.resources.patients.mr',['record'=>$record]))
+                    ->icon('heroicon-o-document-plus'),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
             ])
@@ -72,6 +76,7 @@ class PatientResource extends Resource
     public static function getPages(): array
     {
         return [
+            'mr' => Pages\CreateMedicalRecord::route('/{record}/create-mr'),
             'index' => Pages\ListPatients::route('/'),
             'create' => Pages\CreatePatient::route('/create'),
             'view' => Pages\ViewPatient::route('/{record}'),

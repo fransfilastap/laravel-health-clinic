@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -23,8 +24,8 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->reportable(function (NumberOfMedicineExceedStockException $e, Request $request) {
+            return response()->view('filament.errors.out-of-stock-exception',['message'=>$e->getMessage()]);
         });
     }
 }

@@ -35,7 +35,7 @@ class Medicine extends Model
     }
 
     public function isStockSufficient(int $stockNeeded):bool{
-        return ($this->getAttribute('stock')->stock >= $stockNeeded);
+        return ($this->getAttribute('stock') >= $stockNeeded);
     }
 /*
     public function name() : Attribute {

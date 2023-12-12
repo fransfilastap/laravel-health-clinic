@@ -69,6 +69,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentSpatieRolesPermissionsPlugin::make()
-            ])->viteTheme('resources/css/filament/admin/theme.css')->spa();
+            ]);
     }
 }

@@ -15,14 +15,18 @@ use App\Models\Patient;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontWeight;
 use Filament\Tables;
+use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Hamcrest\Core\Set;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Log;
 
 class MedicalRecordResource extends Resource
 {
@@ -57,6 +61,7 @@ class MedicalRecordResource extends Resource
                     ])->columns(2),
                 ...static::getExaminationDetailScheme(),
                 static::getMedicalTreatmentScheme(),
+                ...static::getAdditionalForm(),
             ]);
     }
 
@@ -134,7 +139,7 @@ class MedicalRecordResource extends Resource
                 ]),
             ])
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
             ]);
     }
 
@@ -290,6 +295,7 @@ class MedicalRecordResource extends Resource
                             $set('patient_name', $record->name);
                             $set('date_of_birth', $record->date_of_birth);
                             $set('age', $record->age());
+                            $set('allergic', $record->allergic);
                         })
                         ->afterStateHydrated(function ($state, Forms\Set $set, Forms\Get $get) {
                             if ($get('patient_id')) {
@@ -304,9 +310,22 @@ class MedicalRecordResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('patient_name')->disabled(),
                             Forms\Components\DatePicker::make('date_of_birth')->disabled(),
-                            Forms\Components\TextInput::make('age')->disabled()
+                            Forms\Components\TextInput::make('age')->disabled(),
+                            Forms\Components\Textarea::make('allergic')->disabled()
                         ])
                 ]);
+    }
+
+    public static function getAdditionalForm(): array
+    {
+        return [
+            Forms\Components\Section::make('Additional Information')
+                ->schema([
+                    Forms\Components\Textarea::make('suggestion'),
+                    Forms\Components\DateTimePicker::make('created_at')
+                        ->label('Backdate (for batch processing)')
+                ])
+        ];
     }
 
     public static function getMedicalTreatmentScheme(): Forms\Components\Component
@@ -339,9 +358,8 @@ class MedicalRecordResource extends Resource
                                     Forms\Components\TextInput::make('number')
                                         ->label('Quantity')
                                         ->numeric()
-                                        ->maxValue(fn(Forms\Get $get) => Medicine::find($get('medicine_id'))->stock ?? -1)
                                         ->required(),
-                                    Forms\Components\Textarea::make('instruction')
+                                    Forms\Components\Textarea::make('instruction')->required()
                                 ]),
                             Forms\Components\Repeater::make('advisedPrescriptions')
                                 ->label(__('labels.medical_record.advised_prescription'))
@@ -358,6 +376,7 @@ class MedicalRecordResource extends Resource
                     ,
                 ]);
     }
+
 
     public static function getWidgets(): array
     {
